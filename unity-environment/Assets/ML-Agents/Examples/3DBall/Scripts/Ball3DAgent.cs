@@ -14,11 +14,6 @@ public class Ball3DAgent : Agent
 
     public override void CollectObservations()
     {
-        AddVectorObs(gameObject.transform.rotation.z);
-        AddVectorObs(gameObject.transform.rotation.x);
-        AddVectorObs((ball.transform.position - gameObject.transform.position));
-        AddVectorObs(ball.transform.GetComponent<Rigidbody>().velocity);
-        SetTextObs("Testing " + gameObject.GetInstanceID());
     }
 
     public override void AgentAction(float[] vectorAction, string textAction)
@@ -39,8 +34,36 @@ public class Ball3DAgent : Agent
             }
 
             SetReward(0.1f);
-
         }
+        else if (brain.brainParameters.vectorActionSpaceType == SpaceType.discrete)
+        {
+            int action = Mathf.FloorToInt(vectorAction[0]);
+
+            switch (action)
+            {
+                case 0:
+                    break;
+                case 1:
+                    gameObject.transform.Rotate(new Vector3(1, 0, 0), 2);
+                    break;
+                case 2:
+                    gameObject.transform.Rotate(new Vector3(1, 0, 0), -2);
+                    break;
+                case 3:
+                    gameObject.transform.Rotate(new Vector3(0, 0, 1), 2);
+                    break;
+                case 4:
+                    gameObject.transform.Rotate(new Vector3(0, 0, 1), -2);
+                    break;
+                default:
+                    Debug.LogWarning("Unknown action: " + action + ".");
+                    break;
+            }
+
+            SetReward(0.1f);
+        }
+
+
         if ((ball.transform.position.y - gameObject.transform.position.y) < -2f ||
             Mathf.Abs(ball.transform.position.x - gameObject.transform.position.x) > 3f ||
             Mathf.Abs(ball.transform.position.z - gameObject.transform.position.z) > 3f)
