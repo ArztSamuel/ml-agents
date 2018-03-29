@@ -372,7 +372,7 @@ class UnityEnvironment(object):
         arr = [float(x) for x in arr]
         return arr
 
-    def step(self,  vector_action=None, memory=None, text_action=None) -> AllBrainInfo:
+    def step(self, vector_action=None, memory=None, text_action=None) -> AllBrainInfo:
         """
         Provides the environment with an action, moves the environment dynamics forward accordingly, and returns
         observation, state, and reward information to the agent.

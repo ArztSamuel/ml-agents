@@ -208,8 +208,10 @@ class TrainerController(object):
         self._create_model_path(self.model_path)
 
         tf.reset_default_graph()
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth = True
 
-        with tf.Session() as sess:
+        with tf.Session(config=config) as sess:
             self._initialize_trainers(trainer_config, sess)
             for k, t in self.trainers.items():
                 self.logger.info(t)

@@ -78,8 +78,8 @@ public class Ball3DAgent : Agent
     public override void AgentReset()
     {
         gameObject.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
-        gameObject.transform.Rotate(new Vector3(1, 0, 0), Random.Range(-10f, 10f));
-        gameObject.transform.Rotate(new Vector3(0, 0, 1), Random.Range(-10f, 10f));
+        //gameObject.transform.Rotate(new Vector3(1, 0, 0), Random.Range(-10f, 10f));
+        //gameObject.transform.Rotate(new Vector3(0, 0, 1), Random.Range(-10f, 10f));
         ball.GetComponent<Rigidbody>().velocity = new Vector3(0f, 0f, 0f);
         ball.transform.position = new Vector3(Random.Range(-1.5f, 1.5f), 4f, Random.Range(-1.5f, 1.5f)) + gameObject.transform.position;
 
