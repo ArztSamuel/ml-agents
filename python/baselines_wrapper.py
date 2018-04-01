@@ -6,13 +6,14 @@ from gym import spaces
 from baselines.common.atari_wrappers import WarpFrame, FrameStack
 
 class MLToGymEnv(gym.Env):
-    def __init__(self, env, trainMode):
+    def __init__(self, env, trainMode, reward_range=(-np.inf, np.inf)):
         """Wraps UnityEnvironment of ML-Agents to be used by baselines algorithms
         """
         gym.Env.__init__(self)
 
         self.unityEnv = env
         self.trainMode = trainMode
+        self.reward_range = reward_range
 
         assert self.unityEnv.number_external_brains > 0, "No external brains defined in unityEnv"
         self.__externalBrainName = self.unityEnv.external_brain_names[0]
@@ -58,11 +59,11 @@ class FloatToUInt8Frame(gym.ObservationWrapper):
         # convert from float64, range 0 - 1 to uint8, range 0 - 255
         frame = 255 * frame
         frame = frame.astype(np.uint8)
-        #frame = frame[...,::-1] #convert to bgr for opencv imshow
+        frame = frame[...,::-1] #convert to bgr for opencv imshow
         return frame
 
-def make_dqn(env, trainMode=True):
-    env = MLToGymEnv(env, trainMode)
+def make_dqn(env, trainMode=True, reward_range=(-np.inf, np.inf)):
+    env = MLToGymEnv(env, trainMode, reward_range)
     env = FloatToUInt8Frame(env)
     env = WarpFrame(env) # Makes sure we have 84 x 84 b&w
     env = FrameStack(env, 4) # Stack last 4 frames
