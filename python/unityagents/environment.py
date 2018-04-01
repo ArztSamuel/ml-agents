@@ -36,6 +36,7 @@ class UnityEnvironment(object):
 
         atexit.register(self.close)
         self.port = base_port + worker_id
+        print("Listening on port: " + str(self.port))
         self._buffer_size = 12000
         self._version_ = "API-3"
         self._loaded = False
