@@ -33,7 +33,7 @@ public class ExternalCommunicator : Communicator
     byte[] messageHolder;
     byte[] lengthHolder;
 
-    StreamWriter logWriter;
+    //StreamWriter logWriter;
     string logPath;
 
     const string _version_ = "API-3";
@@ -114,17 +114,18 @@ public class ExternalCommunicator : Communicator
     /// Contains the logic for the initializtation of the socket.
     public void InitializeCommunicator()
     {
-        Application.logMessageReceived += HandleLog;
-        logPath = Path.GetFullPath(".") + "/unity-environment.log";
-        logWriter = new StreamWriter(logPath, false);
-        logWriter.WriteLine(System.DateTime.Now.ToString());
-        logWriter.WriteLine(" ");
-        logWriter.Close();
+        //Application.logMessageReceived += HandleLog;
+        //logPath = Path.GetFullPath(".") + "/unity-environment.log";
+        //logWriter = new StreamWriter(logPath, false);
+        //logWriter.WriteLine(System.DateTime.Now.ToString());
+        //logWriter.WriteLine(" ");
+        //logWriter.Close();
         messageHolder = new byte[messageLength];
         lengthHolder = new byte[4];
 
         // Create a TCP/IP  socket.  
         sender = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        UnityEngine.Debug.Log("Connecting to : localhost:" + comPort);
         sender.Connect("localhost", comPort);
 
         var accParamerters = new AcademyParameters();
@@ -172,11 +173,11 @@ public class ExternalCommunicator : Communicator
 
     void HandleLog(string logString, string stackTrace, LogType type)
     {
-        logWriter = new StreamWriter(logPath, true);
-        logWriter.WriteLine(type.ToString());
-        logWriter.WriteLine(logString);
-        logWriter.WriteLine(stackTrace);
-        logWriter.Close();
+        //logWriter = new StreamWriter(logPath, true);
+        //logWriter.WriteLine(type.ToString());
+        //logWriter.WriteLine(logString);
+        //logWriter.WriteLine(stackTrace);
+        //logWriter.Close();
     }
 
     /// Listens to the socket for a command and returns the corresponding

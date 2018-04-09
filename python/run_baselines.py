@@ -21,11 +21,13 @@ if __name__ == '__main__':
       learn --help
 
     Options:
-      --method=<n>               The method to be used for training [default: dqn][choices: dqn, a2c, acktr]
-      --load                     Whether to load the model or randomly initialize [default: False].
-      --seed=<n>                 Random seed used for training [default: -1].
-      --rewardLowerBounds=<n>    The lower bounds of the rewards of the environment [default: -inf].
-      --rewardUpperBounds=<n>    The upper bounds of the rewards of the environment [default: inf].
+      --method=<n>                  The method to be used for training [default: dqn][choices: dqn, a2c, acktr]
+      --load                        Whether to load the model or randomly initialize [default: False].
+      --seed=<n>                    Random seed used for training [default: -1].
+      --rewardLowerBounds=<n>       The lower bounds of the rewards of the environment [default: -inf].
+      --rewardUpperBounds=<n>       The upper bounds of the rewards of the environment [default: inf].
+      --max-steps=<n>               The amount of timesteps before the learning process is stopped [default: 4000000].
+      --base-port=<n>               The base port to be used for communication between python and the environment [default: 5005].
     '''
 
     options = docopt(_USAGE)
@@ -41,24 +43,26 @@ if __name__ == '__main__':
         reward_range = (float(options['--rewardLowerBounds']), reward_range[1])
     if options['--rewardUpperBounds'] != 'inf':
         reward_range = (reward_range[0], float(options['--rewardUpperBounds']))
-
     if seed == -1:
         seed = np.random.randint(0, 999999)
+    max_steps = int(options['--max-steps'])
+    base_port = int(options['--base-port'])
+
     set_global_seeds(seed)
 
     act = None
     if method == 'dqn':
         print("Training using DQN...")
-        act = learn_dqn(env_path=env_path, seed=seed, reward_range=reward_range)
+        act = learn_dqn(env_path=env_path, seed=seed, max_steps=max_steps, reward_range=reward_range, base_port=base_port)
     elif method == 'a2c':
         print("Training using A2C...")
-        act = learn_a2c(env_path=env_path, seed=seed, reward_range=reward_range)
+        act = learn_a2c(env_path=env_path, seed=seed, max_steps=max_steps, reward_range=reward_range, base_port=base_port)
     elif method == 'acktr':
         print("Training using ACKTR...")
     else:
         print("Unknown method: \"" + method + "\".")
 
-    model_file_name = "DeliveryDuel.pkl"
+    model_file_name = os.path.basename(env_path).split('.')[0] + ".pkl"
     print("Saving model to " + model_file_name + ".")
-    act.save(model_file_name)
-    env.close()
+    model_file_path = os.path.abspath(os.path.dirname(__file__))
+    act.save(model_file_path + "\\" + model_file_name)

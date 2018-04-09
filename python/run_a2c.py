@@ -12,13 +12,13 @@ from baselines.a2c.a2c import learn as learn_a2c
 from unityagents import UnityEnvironment, UnityEnvironmentException
 from baselines_wrapper import MLToGymEnv
 
-def _make_a2c(env_path, num_env, seed, reward_range):
+def _make_a2c(env_path, num_env, seed, reward_range, base_port):
     """
     Create wrapped SubprocVecEnv for using A2C on a Unity-Environment
     """
     def make_env(rank):
         def _thunk():
-            env = UnityEnvironment(file_name=env_path, seed=(seed + rank), worker_id=rank)
+            env = UnityEnvironment(file_name=env_path, seed=seed, worker_id=rank, base_port=base_port)
             env = MLToGymEnv(env, train_mode=True, reward_range=reward_range)
             env = FloatToUInt8Frame(env)
             env = WarpFrame(env)
@@ -27,8 +27,14 @@ def _make_a2c(env_path, num_env, seed, reward_range):
         return _thunk
     return SubprocVecEnv([make_env(i) for i in range(num_env)])
 
-def learn(env_path, seed, reward_range):
-    env = VecFrameStack(_make_a2c(env_path, num_env=4, seed=seed, reward_range=reward_range), nstack=4)
+def learn(env_path, seed, max_steps, reward_range, base_port):
+    env = VecFrameStack(_make_a2c(env_path, num_env=8, seed=seed, reward_range=reward_range, base_port=base_port), nstack=4)
 
-    learn_a2c(policy=CnnPolicy, env=env, seed=seed, total_timesteps=1000000)
-    env.close()
+    model = learn_a2c(policy=CnnPolicy, env=env, seed=seed, total_timesteps=max_steps)
+
+    try:
+        env.close()
+    except Exception as e:
+        print("Failed to close environment: " + str(e))
+
+    return model
