@@ -30,7 +30,7 @@ def _make_a2c(env_path, num_env, seed, reward_range, base_port):
 def learn(env_path, seed, max_steps, reward_range, base_port):
     env = VecFrameStack(_make_a2c(env_path, num_env=8, seed=seed, reward_range=reward_range, base_port=base_port), nstack=4)
 
-    model = learn_a2c(policy=CnnPolicy, env=env, seed=seed, total_timesteps=max_steps)
+    model = learn_a2c(policy=CnnPolicy, env=env, seed=seed, ent_coef=0.001, total_timesteps=max_steps)
 
     try:
         env.close()
