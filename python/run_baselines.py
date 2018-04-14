@@ -77,7 +77,8 @@ if __name__ == '__main__':
         print("Unknown method: \"" + method + "\".")
 
     model_file_name = os.path.basename(env_path).split('.')[0] + ".pkl"
-    model_path = output_folder + "models\\" + time_string + custom_tag + "\\" + model_file_name
+    model_path = os.path.abspath(os.path.dirname(__file__)) + output_folder + "models\\" + time_string + "\\"
     print("Saving model to " + model_path + ".")
-    cur_path = os.path.abspath(os.path.dirname(__file__))
-    act.save(cur_path + "\\" + model_path)
+	if not os.path.exists(model_path):
+        os.makedirs(model_path)
+    act.save(model_path + model_file_name)
