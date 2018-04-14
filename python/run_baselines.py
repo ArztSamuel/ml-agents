@@ -1,5 +1,3 @@
-# # Unity ML Agents
-# ## ML-Agent Learning
 
 import logging
 

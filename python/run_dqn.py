@@ -42,7 +42,7 @@ def learn(env_path, seed, max_steps, reward_range, base_port, summary_writer):
     model = deepq.models.cnn_to_mlp(
         convs=[(32, 8, 4), (64, 4, 2), (64, 3, 1)],
         hiddens=[256],
-        dueling=False,
+        dueling=True,
     )
 
     act = deepq.learn(
