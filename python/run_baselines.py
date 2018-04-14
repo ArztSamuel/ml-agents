@@ -73,6 +73,6 @@ if __name__ == '__main__':
     model_file_name = os.path.basename(env_path).split('.')[0] + ".pkl"
     model_path = os.path.abspath(os.path.dirname(__file__)) + output_folder + "models\\" + time_string + "\\"
     print("Saving model to " + model_path + ".")
-	if not os.path.exists(model_path):
+    if not os.path.exists(model_path):
         os.makedirs(model_path)
     act.save(model_path + model_file_name)
