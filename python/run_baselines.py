@@ -29,7 +29,6 @@ if __name__ == '__main__':
       --max-steps=<n>               The amount of timesteps before the learning process is stopped [default: 4000000].
       --base-port=<n>               The base port to be used for communication between python and the environment [default: 5005].
       --output-folder=<n>           The folder to save the trained model and summary data to [default: outputs\\]
-      --custom-tag=<n>              A custom tag to distinguish this run in tensorboard [default: None]
     '''
 
     options = docopt(_USAGE)
@@ -50,17 +49,12 @@ if __name__ == '__main__':
     max_steps = int(options['--max-steps'])
     base_port = int(options['--base-port'])
     output_folder = options['--output-folder']
-    custom_tag = options['--custom-tag']
     time_string = strftime("%Y-%m-%d.%H-%M-%S")
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    custom_tag_ext = ''
-    if custom_tag is not None:
-        custom_tag_ext += '\\'
-
-    summary_writer = tf.summary.FileWriter(output_folder + "summaries\\" + method + "\\" + custom_tag_ext + time_string + "\\")
+    summary_writer = tf.summary.FileWriter(output_folder + "summaries\\" + method + "\\" + time_string + "\\")
 
     set_global_seeds(seed)
 
