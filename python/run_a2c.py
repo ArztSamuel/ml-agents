@@ -34,11 +34,14 @@ def _create_summary_callback(summary_writer):
     def _summary_callback(local_vars, global_vars):
         batch_count = local_vars['nbatch']
         steps = local_vars['update'] * batch_count
+        episode_rewards = local_vars['runner'].episode_rewards
         summary = tf.Summary()
         summary.value.add(tag='Info/Steps per Second', simple_value=local_vars['sps'])
         summary.value.add(tag='Info/Policy Entropy', simple_value=local_vars['policy_entropy'])
         summary.value.add(tag='Info/Value Loss', simple_value=local_vars['value_loss'])
         summary.value.add(tag='Info/Explained Variance', simple_value=local_vars['ev'])
+        summary.value.add(tag='Info/Episode Count', simple_value=len(episode_rewards))
+        summary.value.add(tag='Info/Mean 100 Reward', simple_value=round(np.mean(episode_rewards[-101:-1]), 1))
         rewards = local_vars['true_rewards']
         if rewards is not None:
             summary.value.add(tag='Info/Mean Update Reward (' + str(batch_count) + ')', simple_value=(sum(rewards) / batch_count))
@@ -54,7 +57,7 @@ def _create_summary_callback(summary_writer):
 def learn(env_path, seed, max_steps, reward_range, base_port, summary_writer):
     env = VecFrameStack(_make_a2c(env_path, num_env=8, seed=seed, reward_range=reward_range, base_port=base_port), nstack=4)
 
-    model = learn_a2c(policy=CnnPolicy, env=env, seed=seed, ent_coef=0.001, total_timesteps=max_steps, callback=_create_summary_callback(summary_writer=summary_writer))
+    model = learn_a2c(policy=CnnPolicy, env=env, seed=seed, ent_coef=0.00001, total_timesteps=max_steps, callback=_create_summary_callback(summary_writer=summary_writer))
 
     try:
         env.close()

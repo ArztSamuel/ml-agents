@@ -2,11 +2,11 @@
 # ## ML-Agent Learning
 
 from baselines import deepq
-from baselines_wrapper import FloatToUInt8Frame
 from baselines.common.atari_wrappers import WarpFrame, FrameStack
 
 from unityagents import UnityEnvironment, UnityEnvironmentException
-from baselines_wrapper import MLToGymEnv
+
+from baselines_wrapper import FloatToUInt8Frame, MLToGymEnv
 
 import tensorflow as tf
 import numpy as np
@@ -27,6 +27,7 @@ def _create_summary_callback(summary_writer):
             summary.value.add(tag='Info/Mean 100 Reward', simple_value=round(np.mean(episode_rewards[-101:-1]), 1))
             summary.value.add(tag='Info/Episode Length', simple_value=local_vars['episode_length'])
             summary.value.add(tag='Info/Episode Reward', simple_value=episode_rewards[-2])
+            summary.value.add(tag='Info/Episode Count', simple_value=(len(episode_rewards) - 1))
             summary.value.add(tag='Info/% time spent Exploring', simple_value=int(100 * local_vars['exploration'].value(t)))
 
             summary_writer.add_summary(summary, t)
