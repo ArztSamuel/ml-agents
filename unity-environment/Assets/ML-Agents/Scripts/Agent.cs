@@ -43,7 +43,7 @@ public struct AgentInfo
     /// <summary>
     /// Used by the Trainer to store information about the agent. This data
     /// structure is not consumed or modified by the agent directly, they are
-    /// just the owners of their trainier's memory. Currently, however, the
+    /// just the owners of their trainer's memory. Currently, however, the
     /// size of the memory is in the Brain properties.
     /// </summary>
     public List<float> memories;
@@ -108,7 +108,7 @@ public class AgentParameters
     public int maxStep;
 
     /// <summary>
-    /// Determines the behaviour of the agent when done.
+    /// Determines the behavior of the agent when done.
     /// </summary>
     /// <remarks>
     /// If true, the agent will reset when done and start a new episode.
@@ -145,7 +145,7 @@ public class AgentParameters
 /// of the environment extracts its current observation, sends them to its
 /// linked brain and in return receives an action from its brain. In practice,
 /// however, an agent need not send its observation at every step since very
-/// little may have changed between sucessive steps. Currently, how often an
+/// little may have changed between successive steps. Currently, how often an
 /// agent updates its brain with a fresh observation is determined by the
 /// Academy. 
 /// 
@@ -314,7 +314,7 @@ public abstract class Agent : MonoBehaviour
     /// <remarks>
     /// The agent unsubscribes from its current brain (if it has one) and
     /// subscribes to the provided brain. This enables contextual brains, that
-    /// is, updating the behaviour (hence brain) of the agent depending on
+    /// is, updating the behavior (hence brain) of the agent depending on
     /// the context of the game. For example, we may utilize one (wandering)
     /// brain when an agent is randomly exploring an open world, but switch
     /// to another (fighting) brain when it comes into contact with an enemy.
@@ -544,7 +544,7 @@ public abstract class Agent : MonoBehaviour
         if (param.cameraResolutions.Length > agentParameters.agentCameras.Count)
         {
             throw new UnityAgentsException(string.Format(
-                "Not enough cameras for agent {0} : Bain {1} expecting at " +
+                "Not enough cameras for agent {0} : Brain {1} expecting at " +
                 "least {2} cameras but only {3} were present.",
                 gameObject.name, brain.gameObject.name,
                 brain.brainParameters.cameraResolutions.Length,
@@ -574,7 +574,7 @@ public abstract class Agent : MonoBehaviour
     /// </summary>
     /// <remarks>
     /// Simply, an agents observation is any environment information that helps
-    /// the Agent acheive its goal. For example, for a fighting Agent, its
+    /// the Agent achieve its goal. For example, for a fighting Agent, its
     /// observation could include distances to friends or enemies, or the 
     /// current level of ammunition at its disposal.
     /// Recall that an Agent may attach vector, visual or textual observations.
@@ -807,7 +807,7 @@ public abstract class Agent : MonoBehaviour
                 else if (requestDecision)
                 {
                     // If not event based, the agent must wait to request a
-                    // decsion before reseting to keep multiple agents in sync.
+                    // decision before reseting to keep multiple agents in sync.
                     _AgentReset();
                 }
             }
@@ -888,7 +888,7 @@ public abstract class Agent : MonoBehaviour
     }
 
     /// <summary>
-    /// Converts a camera and correspinding resolution to a 2D texture.
+    /// Converts a camera and corresponding resolution to a 2D texture.
     /// </summary>
     /// <returns>The 2D texture.</returns>
     /// <param name="camera">Camera.</param>
